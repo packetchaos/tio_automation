@@ -24,12 +24,16 @@ def grab_headers():
 def get_data(url_mod):
     #Base URL
     url = "https://cloud.tenable.com"
+
     #Retreive Headers
     headers = grab_headers()
+
     #API Call
     r = requests.request('GET', url + url_mod, headers=headers, verify=False)
+
     #convert response to json
     data = r.json()
+
     #return data in json format
     return data
 
@@ -43,6 +47,7 @@ def post_data(url_mod,payload):
 
     #send Post request to API endpoint
     r = requests.post(url + url_mod, json=payload, headers=headers, verify=False)
+
     #retreive data in json format
     data = r.json()
 
@@ -50,8 +55,11 @@ def post_data(url_mod,payload):
 
 
 def vuln_export():
+    # Limit the data to 30 days
+    thirty_days = time.time() - 2592000
+
     # Set the payload to the maximum number of assets to be pulled at once
-    pay_load = {"num_assets": 100}
+    pay_load = {"num_assets": 5000, "filters": {"last_found": int(thirty_days)}}
 
     # request an export of the data
     export = post_data("/vulns/export", pay_load)
@@ -108,8 +116,11 @@ def vuln_export():
 
 
 def asset_export():
-    # Set the payload to the maximum number of assets to be pulled at once
-    pay_load = {"chunk_size": 5000}
+    #Limit the data to the last 30 days
+    thirty_days = time.time() - 2592000
+
+    # Set the payload to the maximum number to be pulled at once
+    pay_load = {"chunk_size": 5000, "filters": {"last_assessed": int(thirty_days)}}
 
     # request an export of the data
     export = post_data("/assets/export", pay_load)
@@ -132,15 +143,19 @@ def asset_export():
     while not_ready is True:
         # Pull the status, then pause 5 seconds and ask again.
         if status['status'] == 'PROCESSING':
+
             #pause the program for 5 seconds and check the status again
             time.sleep(5)
+
             #pull new status
             status = get_data('/assets/export/' + ex_uuid + '/status')
+
             #notify the user of the current status
             print(status)
 
         # Exit Loop once confirmed finished
         elif status['status'] == 'FINISHED':
+
             #set not_ready to false to exit while-loop
             not_ready = False
 
@@ -155,12 +170,15 @@ def asset_export():
     for x in status['chunks_available']:
         #Download the chunk data
         chunk_data = get_data('/assets/export/' + ex_uuid + '/chunks/' + str(x))
+
         #append the data to the temp list
         data.append(chunk_data)
+
         #open a new file to save to
         with open('tio_asset_data.json', 'w') as json_outfile:
             #write the data to the file
             json.dump(chunk_data, json_outfile)
+
             #close the file
             json_outfile.close()
 

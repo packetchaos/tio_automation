@@ -21,18 +21,23 @@ def grab_headers():
 def get_data(url_mod):
     #Base URL
     url = "https://cloud.tenable.com"
+
     #Retreive Headers
     headers = grab_headers()
+
     #API Call
     r = requests.request('GET', url + url_mod, headers=headers, verify=False)
+
     #convert response to json
     data = r.json()
+
     #return data in json format
     return data
 
 def main():
     #grab all of the scans in t.io
     data = get_data('/scans')
+
     #print out a formated version of the response
     pprint.pprint(data)
 
