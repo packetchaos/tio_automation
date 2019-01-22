@@ -13,8 +13,8 @@ requests.packages.urllib3.disable_warnings()
 
 def grab_headers():
     #Enter Your Access keys
-    access_key = '474c209c510b0b8b51304805540ff23d7725cf2e6d8b01928d5eefa630a5dece'
-    secret_key = 'ac227abb214c47c511546238897c1d22af73a6844882abf79cbf5074e9af02b7'
+    access_key = ''
+    secret_key = ''
 
     #Set the Authentication Header
     headers = {'Content-type':'application/json','X-ApiKeys':'accessKey='+access_key+';secretKey='+secret_key}
