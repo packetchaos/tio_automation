@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #Disclaimer: This is NOT supported By Tenable!
-#This script reaches out to Tenable IO and exports the lastes scan information by Scan ID of your choice
+#This script reaches out to Tenable IO and exports the latest scan information by Scan ID of your choice
 #Then it imports the nessus data into a repository of your choice
 #zero Error correction
 from tenable.sc import TenableSC
@@ -40,4 +40,3 @@ def download_scans():
 
 if __name__ == '__main__':
     download_scans()
-    
