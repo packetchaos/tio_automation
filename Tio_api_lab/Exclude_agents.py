@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 #Disclaimer: This is NOT supported By Tenable!
+#This script reaches out to Tenable IO and pulls down all of the current IPs of any Agent
+#Then pushes those IPs into a Static IP address list in Security Center.
 from tenable.sc import TenableSC
 from tenable.io import TenableIO
 
