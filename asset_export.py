@@ -2,10 +2,6 @@
 import requests
 import csv
 import time
-import sqlite3
-from sqlite3 import Error
-
-
 requests.packages.urllib3.disable_warnings()
 
 def grab_headers():
@@ -57,21 +53,10 @@ def post_data(url_mod,payload):
     return data
 
 
-def new_db_connection(db_file):
-    conn = None
-    try:
-        conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
-    except Error as E:
-        print(E)
-
-    return conn
-
-
 def asset_export():
     # Set the payload to the maximum number of assets to be pulled at once
     thirty_days = time.time() - 7776000#2660000
-    pay_load = {"chunk_size": 100, "filters": {"last_assessed": int(thirty_days)}}
+    pay_load = {"chunk_size": 100}#, "filters": {"last_assessed": int(thirty_days)}}
     try:
         # request an export of the data
         export = post_data("/assets/export", pay_load)
@@ -114,7 +99,7 @@ def asset_export():
                        "Mac Address", "Agent UUID", "Last Licensed Scan Data"]
 
         #Crete a csv file object
-        with open('asset_data.csv', mode='w') as csv_file:
+        with open('asset_data.csv', mode='w', newline='') as csv_file:
             agent_writer = csv.writer(csv_file, delimiter=',', quotechar='"')
 
             #write our Header information first
@@ -126,7 +111,7 @@ def asset_export():
 
                 print("Parsing Chunk {} ...Finished".format(x+1))
                 for assets in chunk_data:
-                    #create a blank list to append asset details
+                     #create a blank list to append asset details
                     csv_list = []
                     #Try block to ignore assets without IPs
                     try:
@@ -189,14 +174,16 @@ def asset_export():
                     except IndexError:
                         pass
 
-
     except KeyError:
         print("Well this is a bummer; you don't have permissions to download Asset data :( ")
 
 
 if __name__ == '__main__':
-
+    #vuln_export()
     asset_export()
     print("\nStarting your CSV Export now")
-    print("\nYour export is finished")
-
+    #csv_export()
+    #print("\nYour export is finished")
+    #print("\nStarting your agent CSV Export")
+    #agent_export()
+    #print("\nAgent Export Finished")
