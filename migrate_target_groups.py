@@ -3,8 +3,8 @@ import requests
 
 def grab_headers():
 
-    access_key = '905b563856c9a2feddf6c4fae0f5e231be2d5168cc5150ed1cf7f944a90bc9ce'
-    secret_key = 'af4e798ce1abdb1fbb3abbfdf9335a5962ab875cc845861105eaed689f41e0ea'
+    access_key = ''
+    secret_key = ''
     return {'Content-type': 'application/json', 'user-agent': 'navi-TG-migration-script', 'X-ApiKeys': 'accessKey=' + access_key + ';secretKey=' + secret_key}
 
 
